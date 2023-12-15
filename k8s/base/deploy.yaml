@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-mongo2
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-mongo2
+  template:
+    metadata:
+      labels:
+        app: demo-mongo2
+      annotations:
+        backstage.io/kubernetes-id: demo-mongo2
+    spec:
+      imagePullSecrets:
+        - name: regcred-ghcr-io-secret
+      containers:
+        - name: demo-mongo2
+          image: ghcr.io/xidp/demo-mongo2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 125m
+              memory: 250Mi
+            limits:
+              cpu: 250m
+              memory: 500Mi
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DB_DRIVER
+              value: mongo
+            - name: DB_CONN_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: demo-mongo2-dev-db-claim-secret
+                  key: DB_CONN_STRING
