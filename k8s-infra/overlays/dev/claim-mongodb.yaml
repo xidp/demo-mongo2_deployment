@@ -1,7 +1,7 @@
 ---
 apiVersion: xgeeks.org/v1alpha1
 kind: MongoDatabase
-metadata:metadata:
+metadata:
   name: demo-mongo2-db-claim
   namespace: idp-dev
   annotations:
